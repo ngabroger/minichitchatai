@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Groq from 'groq-sdk';
 
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
+function getGroqClient() {
+  return new Groq({
+    apiKey: process.env.GROQ_API_KEY,
+  });
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -32,6 +34,7 @@ export async function POST(request: NextRequest) {
 }
 
 async function generateAIResponse(userMessage: string): Promise<string> {
+  const groq = getGroqClient();
   const response = await groq.chat.completions.create({
     messages: [
       {
